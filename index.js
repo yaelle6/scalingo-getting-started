@@ -1,5 +1,8 @@
 'use strict';
 
+const packageJSON = require('./package.json');
+const applicationVersion =  packageJSON.version
+
 const Hapi = require('@hapi/hapi');
 const axios = require('axios')
 
@@ -34,6 +37,15 @@ const init = async () => {
 
         return JSON.stringify(response.data);
     }})
+
+    server.route({
+      method: 'GET',
+      path: '/getVersion',
+      handler: (request, h) => {
+  
+        return applicationVersion;
+      }
+    });
 
   await server.start();
   console.log('Server running on %s', server.info.uri);
