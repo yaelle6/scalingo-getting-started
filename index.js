@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const axios = require('axios')
 
 const init = async () => {
   const port = parseInt(process.env.PORT, 10) || 4000;
@@ -18,6 +19,21 @@ const init = async () => {
       return 'Hello World!';
     }
   });
+
+  server.route({
+    method: 'GET',
+    path: '/pix-api-production-version',
+    handler: async (request, h) => {
+      const baseUrl = 'https://api.pix.fr/api';
+        let response;
+        try {
+            response = await axios.get(baseUrl);
+        } catch (error) {
+            response = error;
+        }
+
+        return JSON.stringify(response.data);
+    }})
 
   await server.start();
   console.log('Server running on %s', server.info.uri);
